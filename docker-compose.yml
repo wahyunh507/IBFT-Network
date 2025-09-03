@@ -1,0 +1,118 @@
+version: '3.7'
+
+services:
+  node1:
+    container_name: besu-node1
+    image: hyperledger/besu:25.8.0
+    ports:
+      - "8545:8545" # RPC
+      - "30303:30303" # P2P
+    volumes:
+      - ./Node-1/data:/var/lib/besu/data
+      - ./genesis.json:/var/lib/besu/genesis.json
+    networks:
+      besu-network:
+        ipv4_address: 172.20.0.2
+    command: >
+      --data-path=/var/lib/besu/data
+      --genesis-file=/var/lib/besu/genesis.json
+      --node-private-key-file=/var/lib/besu/data/key
+      --rpc-http-enabled
+      --rpc-http-api=ETH,NET,IBFT,ADMIN
+      --host-allowlist="*"
+      --rpc-http-cors-origins="all"
+      --rpc-http-port=8545
+      --p2p-port=30303
+      --profile=ENTERPRISE
+      --network-id=1337
+
+  node2:
+    container_name: besu-node2
+    image: hyperledger/besu:25.8.0
+    ports:
+      - "8546:8546"
+      - "30304:30304"
+    volumes:
+      - ./Node-2/data:/var/lib/besu/data
+      - ./genesis.json:/var/lib/besu/genesis.json
+    depends_on:
+      - node1
+    networks:
+      besu-network:
+        ipv4_address: 172.20.0.3
+    command: >
+      --data-path=/var/lib/besu/data
+      --genesis-file=/var/lib/besu/genesis.json
+      --node-private-key-file=/var/lib/besu/data/key
+      --bootnodes=enode://35ffa7fa5a835a0459915f9bb074b2db24068e5fa3a62e73e7240158f778c074373f66f36a5cca51139048e4ee7e0d36bd589d5ac53c8446dd6ef04cecac2e09@172.20.0.2:30303
+      --rpc-http-enabled
+      --rpc-http-api=ETH,NET,IBFT,ADMIN
+      --host-allowlist="*"
+      --rpc-http-cors-origins="all"
+      --rpc-http-port=8546
+      --p2p-port=30304
+      --profile=ENTERPRISE
+      --network-id=1337
+
+  node3:
+    container_name: besu-node3
+    image: hyperledger/besu:25.8.0
+    ports:
+      - "8547:8547"
+      - "30305:30305"
+    volumes:
+      - ./Node-3/data:/var/lib/besu/data
+      - ./genesis.json:/var/lib/besu/genesis.json
+    depends_on:
+      - node1
+    networks:
+      besu-network:
+        ipv4_address: 172.20.0.4
+    command: >
+      --data-path=/var/lib/besu/data
+      --genesis-file=/var/lib/besu/genesis.json
+      --node-private-key-file=/var/lib/besu/data/key
+      --bootnodes=enode://35ffa7fa5a835a0459915f9bb074b2db24068e5fa3a62e73e7240158f778c074373f66f36a5cca51139048e4ee7e0d36bd589d5ac53c8446dd6ef04cecac2e09@172.20.0.2:30303
+      --rpc-http-enabled
+      --rpc-http-api=ETH,NET,IBFT,ADMIN
+      --host-allowlist="*"
+      --rpc-http-cors-origins="all"
+      --rpc-http-port=8547
+      --p2p-port=30305
+      --profile=ENTERPRISE
+      --network-id=1337
+
+  node4:
+    container_name: besu-node4
+    image: hyperledger/besu:25.8.0
+    ports:
+      - "8548:8548"
+      - "30306:30306"
+    volumes:
+      - ./Node-4/data:/var/lib/besu/data
+      - ./genesis.json:/var/lib/besu/genesis.json
+    depends_on:
+      - node1
+    networks:
+      besu-network:
+        ipv4_address: 172.20.0.5
+    command: >
+      --data-path=/var/lib/besu/data
+      --genesis-file=/var/lib/besu/genesis.json
+      --node-private-key-file=/var/lib/besu/data/key
+      --bootnodes=enode://35ffa7fa5a835a0459915f9bb074b2db24068e5fa3a62e73e7240158f778c074373f66f36a5cca51139048e4ee7e0d36bd589d5ac53c8446dd6ef04cecac2e09@172.20.0.2:30303
+      --rpc-http-enabled
+      --rpc-http-api=ETH,NET,IBFT,ADMIN
+      --host-allowlist="*"
+      --rpc-http-cors-origins="all"
+      --rpc-http-port=8548
+      --p2p-port=30306
+      --profile=ENTERPRISE
+      --network-id=1337
+
+networks:
+  besu-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
