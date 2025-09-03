@@ -1,0 +1,19 @@
+version: '3.7'
+
+services:
+  explorer:
+    container_name: besu-explorer
+    image: consensys/quorum-explorer:latest
+    ports:
+      - "25000:25000"
+    networks:
+      - besu-network
+    environment:
+      - RPC_URL=http://172.20.0.2:8545
+      - GETH_BOOTNODE=enode://35ffa7fa5a835a0459915f9bb074b2db24068e5fa3a62e73e7240158f778c074373f66f36a5cca51139048e4ee7e0d36bd589d5ac53c8446dd6ef04cecac2e09@172.20.0.2:30303
+      - GETH_NETWORK_ID=1337
+      - GETH_MINER_ADDRESSES=0xdcb45dfdd2bcd119976faa5de5d7dd5b89e0c9cad561b4196a228ddd2102d8319479f1d8895dda94ad221615e1c8811d1113f4f08f5437e5c27189d488979b7c,0xef2838ff0666a4603e3071c1505abbcd765cf5acc7699f408c06523fbaae0133a5c4b73a890080fd1c64130c413b183eaad77480611aef8dd2e3f57d23e68f8d,0x642ada4f5b2cada653ffd3b627cf78c50756fb1ce737ccfadd306f4389fd34370f0d0a5469852dfb5437c2730c9850e1e430ca0329f1209932045a879a7a7717,0x35ffa7fa5a835a0459915f9bb074b2db24068e5fa3a62e73e7240158f778c074373f66f36a5cca51139048e4ee7e0d36bd589d5ac53c8446dd6ef04cecac2e09
+
+networks:
+  besu-network:
+    external: true
